@@ -1,0 +1,29 @@
+{
+  "name": "redux-modular",
+  "version": "0.0.1",
+  "description": "Modular Redux helpers",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --config jest-config.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thomasdashney/redux-modular.git"
+  },
+  "keywords": [
+    "redux",
+    "modular"
+  ],
+  "author": "Thomas Dashney",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thomasdashney/redux-modular/issues"
+  },
+  "homepage": "https://github.com/thomasdashney/redux-modular#readme",
+  "devDependencies": {
+    "babel-jest": "^21.2.0",
+    "babel-preset-env": "^1.6.0",
+    "jest": "^21.2.1"
+  },
+  "dependencies": {}
+}
