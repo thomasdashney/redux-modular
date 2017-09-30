@@ -1,0 +1,20 @@
+language: node_js
+node_js:
+- 8.3.0
+cache:
+  directories:
+  - node_modules
+addons:
+  code_climate:
+    repo_token: $CODE_CLIMATE_TOKEN
+branches:
+  only:
+  - master
+script: npm test -- --coverage --ci --runInBand
+after_success:
+  - npm install -g codeclimate-test-reporter
+  - codeclimate-test-reporter < ./coverage/lcov.info
+env:
+  global:
+  # CODE_CLIMATE_TOKEN
+  - secure: GYVCulIlyDXZ144XFgGgmukXJo0END8SE6KdsI8TgG/n1N00QLeQgfUJetwMlD02KoE+mrkgWkXMtlZbvK016GJ5mx8aYiqHj9B4wUTbuZTUgb/rCwyQszyISLHE/4LW7t9CDanRCySiRkRa/ihqvIToGpWF7Cn7SDLtNQS5UR3Kvbf88NQxQMXKnnTDZixt8RDD1MRYaANo8ZAqFzLibFOzmiR5WHa7NOs61pWmTqV7iuzgpTDdIwmtYQIHi9oAZx63aafE/EoaaH33y/UVy0JZhBszOqYhdFP+rfJ6xX/wFD1C3gpwh99v0+gcJ2CQ3uA/I+kYdWZnJ9NV5hnWJNTWpLn30dZm71OKY+kFRMys4gGxJLmmZ+liGdB9Ed96A2xEBWYPPSl8nU5AnfEVQrhC8HXepyXRfhhNZZ0NlEWUArPfU+uUR7SInL8WWKE9XpnS2PvihufAqRzFvYSwEveS/vJl/lNaSOAnkYa8YeoiHwx6VwaRMuHviCloWnGJDR2uYpYKII3NRSAPTqvAAdkStLMcXd1Vvszms6WHYIzpPoo5M0cqFDEUisgo7wCFiMs3ppCKEBe6lm4i3hoTICDjuhn7gFcjwmnQUi0K97hmG08VbbtUd3UJpXb5KB8px74nf2WxLBVAoIYb+SHjSop/+Ht69i0m7hM+gdADkJo=

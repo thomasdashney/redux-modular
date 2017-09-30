@@ -1,13 +1,26 @@
 {
-  "presets": [
-    ["env", {
-      "targets": {
-        "browsers": ["last 2 versions", "safari >= 7"]
-      },
-      "modules": false
-    }]
-  ],
-  "plugins": [
-    "transform-object-rest-spread"
-  ]
+  "ignore": [],
+  "env": {
+    "test": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": "8.3.0"
+          }
+        }]
+      ],
+      "plugins": ["transform-object-rest-spread"]
+    },
+    "development": {
+      "presets": [
+        ["env", {
+          "targets": {
+            "browsers": ["last 2 versions", "safari >= 7"]
+          },
+          "modules": false
+        }]
+      ],
+      "plugins": ["transform-object-rest-spread"]
+    }
+  }
 }
