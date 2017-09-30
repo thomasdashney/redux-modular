@@ -7,13 +7,13 @@ Helpers for scaling and abstracting redux by co-locating actions, reducers and s
 ## Install
 
 ```
-$ npm install --save https://github.com/thomasdashney/redux-modular
+$ npm install --save redux-modular
 ```
 
 or
 
 ```
-$ yarn add https://github.com/thomasdashney/redux-modular
+$ yarn add redux-modular
 ```
 
 ## Usage
