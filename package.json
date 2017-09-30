@@ -20,10 +20,12 @@
     "url": "https://github.com/thomasdashney/redux-modular/issues"
   },
   "homepage": "https://github.com/thomasdashney/redux-modular#readme",
+  "dependencies": {
+    "lodash.get": "^4.4.2"
+  },
   "devDependencies": {
     "babel-jest": "^21.2.0",
     "babel-preset-env": "^1.6.0",
     "jest": "^21.2.1"
-  },
-  "dependencies": {}
+  }
 }
