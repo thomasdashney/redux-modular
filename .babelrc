@@ -8,8 +8,7 @@
             "node": "8.3.0"
           }
         }]
-      ],
-      "plugins": ["transform-object-rest-spread"]
+      ]
     },
     "development": {
       "presets": [
@@ -19,8 +18,7 @@
           },
           "modules": false
         }]
-      ],
-      "plugins": ["transform-object-rest-spread"]
+      ]
     }
   }
 }

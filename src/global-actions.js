@@ -25,9 +25,8 @@ export default (pathToState, actions) => {
       action = createAction(type, actions[key])
     }
 
-    return {
-      ...prev,
+    return Object.assign({}, prev, {
       [key]: action
-    }
+    })
   }, {})
 }
