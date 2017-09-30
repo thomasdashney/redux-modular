@@ -1,1 +1,6 @@
-{}
+{
+  "testPathIgnorePatterns": [
+    "/node_modules/",
+    "/lib/"
+  ]
+}

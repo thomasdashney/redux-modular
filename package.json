@@ -4,6 +4,7 @@
   "description": "Modular Redux helpers",
   "main": "index.js",
   "scripts": {
+    "build": "babel src --out-dir lib",
     "test": "jest --config jest-config.json"
   },
   "repository": {
@@ -24,8 +25,10 @@
     "lodash.get": "^4.4.2"
   },
   "devDependencies": {
+    "babel-cli": "^6.26.0",
     "babel-jest": "^21.2.0",
     "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
     "jest": "^21.2.1"
   }
 }
