@@ -5,9 +5,7 @@ import createAction from '../src/create-action'
 it('creates an FSA-compliant action creator', () => {
   const someAction = createAction('SOME_TYPE')
 
-  expect(
-    someAction('test1', 'test2')
-  ).toEqual({
+  expect(someAction()).toEqual({
     type: 'SOME_TYPE',
     payload: null
   })

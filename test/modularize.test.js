@@ -43,20 +43,22 @@ it('enables dynamic modularization of reducers to actions', () => {
 })
 
 it('enables dynamic modularization of selectors', () => {
-  const logic = modularize({
-    selectors: localSelector => ({
-      mySelector: state => localSelector(state)
-    })
-  })('nested.path')
+  ['nested.path', ['nested', 'path']].forEach(pathString => {
+    const logic = modularize({
+      selectors: localSelector => ({
+        mySelector: state => localSelector(state)
+      })
+    })(pathString)
 
-  expect(logic).toHaveProperty('selectors')
-  expect(logic.selectors).toHaveProperty('mySelector')
-  const state = {
-    nested: {
-      path: { modularized: 'state' }
+    expect(logic).toHaveProperty('selectors')
+    expect(logic.selectors).toHaveProperty('mySelector')
+    const state = {
+      nested: {
+        path: { modularized: 'state' }
+      }
     }
-  }
-  expect(logic.selectors.mySelector(state)).toEqual({ modularized: 'state' })
+    expect(logic.selectors.mySelector(state)).toEqual({ modularized: 'state' })
+  })
 })
 
 it('throws an error if no params are passed', () => {
