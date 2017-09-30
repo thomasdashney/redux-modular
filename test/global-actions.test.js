@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import globalActions from '../global-actions'
-import createActions from '../create-actions'
+import globalActions from '../src/global-actions'
+import createActions from '../src/create-actions'
 
 it('creates actions with types including the state path', () => {
   let actions = globalActions('path.to.state', {

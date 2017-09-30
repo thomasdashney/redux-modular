@@ -1,9 +1,9 @@
 /* eslint-env jest */
 
 import { combineReducers } from 'redux'
-import createActions from '../create-actions'
-import createReducer from '../create-reducer'
-import modularize from '../modularize'
+import createActions from '../src/create-actions'
+import createReducer from '../src/create-reducer'
+import modularize from '../src/modularize'
 
 it('enables dynamic modularization of actions', () => {
   const createLogic = modularize({

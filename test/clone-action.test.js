@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import createAction from '../create-action'
-import cloneAction from '../clone-action'
+import createAction from '../src/create-action'
+import cloneAction from '../src/clone-action'
 
 it('maintains functionality', () => {
   const action = createAction('SOME_TYPE', param => ({ param }))

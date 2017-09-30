@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import createAction from '../create-action'
+import createAction from '../src/create-action'
 
 it('creates an FSA-compliant action creator', () => {
   const someAction = createAction('SOME_TYPE')

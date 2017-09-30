@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import createActions from '../create-actions'
+import createActions from '../src/create-actions'
 
 it('creates actions with types including the state path', () => {
   let actions = createActions({ increment: () => null })

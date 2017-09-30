@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import createReducer from '../create-reducer'
-import createAction from '../create-action'
+import createReducer from '../src/create-reducer'
+import createAction from '../src/create-action'
 
 it('sets initial state', () => {
   const initialState = { initial: 'state' }
