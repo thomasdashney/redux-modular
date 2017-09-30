@@ -1,10 +1,11 @@
 {
   "name": "redux-modular",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Modular Redux helpers",
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
+    "publish-npm": "npm run build && npm publish",
     "test": "jest --config jest-config.json"
   },
   "repository": {
