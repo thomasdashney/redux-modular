@@ -1,5 +1,4 @@
 import createAction from './create-action'
-import cloneAction from './clone-action'
 
 const isArray = value => {
   return typeof value === 'object' &&
@@ -18,15 +17,8 @@ export default (pathToState, actions) => {
   return Object.keys(actions).reduce((prev, key) => {
     const type = `${key} (${pathToState})`
 
-    let action = actions[key]
-    if (action._type === 'localizedActionCreator') {
-      action = cloneAction(actions[key], type)
-    } else {
-      action = createAction(type, actions[key])
-    }
-
     return Object.assign({}, prev, {
-      [key]: action
+      [key]: createAction(type, actions[key])
     })
   }, {})
 }

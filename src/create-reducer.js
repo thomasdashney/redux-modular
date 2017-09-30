@@ -9,8 +9,5 @@ export default (initialState, reducersByAction) => {
     }
   }
 
-  reducer._initialState = initialState
-  reducer._reducersByAction = reducersByAction
-  reducer._type = 'createReducer'
   return reducer
 }

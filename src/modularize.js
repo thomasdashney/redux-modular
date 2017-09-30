@@ -1,5 +1,5 @@
 import get from 'lodash.get'
-import globalActions from './global-actions'
+import globalizeActions from './globalize-actions'
 
 export default (params) => {
   if (!params) {
@@ -10,7 +10,7 @@ export default (params) => {
     let { actions, reducer, selectors } = params
 
     if (actions) {
-      actions = globalActions(pathToState, actions)
+      actions = globalizeActions(pathToState, actions)
     }
 
     if (actions && reducer) {

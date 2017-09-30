@@ -1,7 +1,6 @@
 /* eslint-env jest */
 
 import { combineReducers } from 'redux'
-import createActions from '../src/create-actions'
 import createReducer from '../src/create-reducer'
 import modularize from '../src/modularize'
 
@@ -21,28 +20,24 @@ it('enables dynamic modularization of actions', () => {
 })
 
 it('enables dynamic modularization of reducers to actions', () => {
-  const localizedActions = createActions({
-    increment: () => null
-  })
-
-  const localizedReducer = actions => {
-    return combineReducers({
-      value: createReducer(0, {
-        [actions.increment]: prev => prev + 1,
-        'SET_TO_0': () => 0
+  const createLogic = modularize({
+    actions: {
+      increment: () => null
+    },
+    reducer: actions => {
+      return combineReducers({
+        value: createReducer(0, {
+          [actions.increment]: prev => prev + 1,
+          'SET_TO_0': () => 0
+        })
       })
-    })
-  }
-  const createLogic = modularize({ actions: localizedActions, reducer: localizedReducer })
+    }
+  })
   const logic = createLogic('path.to.module')
   expect(logic).toHaveProperty('reducer')
 
   const { reducer, actions } = logic
-  expect(
-    reducer(undefined, { type: '@@INIT' })
-  ).toEqual(localizedReducer(localizedActions)(undefined, { type: '@@INIT' }))
 
-  expect(reducer({ value: 1 }, localizedActions.increment())).toEqual({ value: 1 })
   expect(reducer({ value: 1 }, actions.increment())).toEqual({ value: 2 })
   expect(reducer({ value: 5 }, { type: 'SET_TO_0' })).toEqual({ value: 0 })
 })

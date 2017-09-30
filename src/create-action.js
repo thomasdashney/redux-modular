@@ -6,7 +6,5 @@ export default (type, payloadCreator = () => null) => {
 
   actionCreator.toString = () => type
 
-  actionCreator._payloadCreator = payloadCreator
-
   return actionCreator
 }
