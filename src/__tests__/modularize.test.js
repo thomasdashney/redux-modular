@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import combineReducers from '../combine-reducers'
+import { combineReducers } from 'redux'
 import createActions from '../create-actions'
 import createReducer from '../create-reducer'
 import modularize from '../modularize'
