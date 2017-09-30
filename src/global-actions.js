@@ -16,7 +16,7 @@ export default (pathToState, actions) => {
   }
 
   return Object.keys(actions).reduce((prev, key) => {
-    const type = pathToState ? `${key} (${pathToState})` : key
+    const type = `${key} (${pathToState})`
 
     let action = actions[key]
     if (action._type === 'localizedActionCreator') {

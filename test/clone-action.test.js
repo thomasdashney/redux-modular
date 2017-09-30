@@ -8,8 +8,7 @@ it('maintains functionality', () => {
   const cloned = cloneAction(action, 'SOME_TYPE')
   expect(cloned(1)).toEqual({
     type: 'SOME_TYPE',
-    payload: { param: 1 },
-    meta: null
+    payload: { param: 1 }
   })
 
   expect(cloned.toString()).toEqual('SOME_TYPE')
@@ -26,7 +25,5 @@ it('allows the type to be set without affecting the original action', () => {
 
 it('maintains _type property', () => {
   const action = createAction('TYPE')
-  action._type = 'meta'
   const cloned = cloneAction(action)
-  expect(cloned._type).toEqual('meta')
 })

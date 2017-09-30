@@ -63,3 +63,9 @@ it('enables dynamic modularization of selectors', () => {
   }
   expect(logic.selectors.mySelector(state)).toEqual({ modularized: 'state' })
 })
+
+it('throws an error if no params are passed', () => {
+  expect(() => {
+    modularize()
+  }).toThrow(Error)
+})

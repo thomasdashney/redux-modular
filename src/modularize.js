@@ -1,24 +1,30 @@
 import get from 'lodash.get'
 import globalActions from './global-actions'
 
-export default (params = {}) => pathToState => {
-  let { actions, reducer, selectors } = params
-
-  if (actions) {
-    actions = globalActions(pathToState, actions)
+export default (params) => {
+  if (!params) {
+    throw new Error('An object must be passed to modularize()')
   }
 
-  if (actions && reducer) {
-    reducer = reducer(actions)
-  }
+  return pathToState => {
+    let { actions, reducer, selectors } = params
 
-  if (selectors) {
-    selectors = selectors(state => get(state, pathToState))
-  }
+    if (actions) {
+      actions = globalActions(pathToState, actions)
+    }
 
-  return {
-    actions,
-    reducer,
-    selectors
+    if (actions && reducer) {
+      reducer = reducer(actions)
+    }
+
+    if (selectors) {
+      selectors = selectors(state => get(state, pathToState))
+    }
+
+    return {
+      actions,
+      reducer,
+      selectors
+    }
   }
 }

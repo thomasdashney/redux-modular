@@ -1,14 +1,12 @@
-export default (type, payloadCreator = () => null, metaCreator = () => null) => {
+export default (type, payloadCreator = () => null) => {
   const actionCreator = (...params) => ({
     type,
-    payload: payloadCreator(...params),
-    meta: metaCreator(...params)
+    payload: payloadCreator(...params)
   })
 
   actionCreator.toString = () => type
 
   actionCreator._payloadCreator = payloadCreator
-  actionCreator._metaCreator = metaCreator
 
   return actionCreator
 }

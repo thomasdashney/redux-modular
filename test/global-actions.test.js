@@ -42,3 +42,11 @@ it('interopts with actions created with createActions', () => {
     param2: 'test2'
   })
 })
+
+it('throws an error if pathToState is invalid', () => {
+  const actions = { increment: () => null }
+
+  expect(() => globalActions(null, actions)).toThrow()
+  expect(() => globalActions(5, actions)).toThrow()
+  expect(() => globalActions({}, actions)).toThrow()
+})
