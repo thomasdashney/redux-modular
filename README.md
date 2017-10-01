@@ -40,7 +40,7 @@ const createCounter = modularize({
   }),
 
   selectors: localStateSelector => ({
-    counterValue: state => localStateSelector(state)
+    counterValue: localStateSelector
   })
 })
 
