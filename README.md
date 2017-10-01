@@ -22,11 +22,11 @@ Creating a module:
 
 ```js
 import { combineReducers, createStore } from 'redux'
-import { modularize, createReducer } from 'redux-modular'
+import { mount, createReducer } from 'redux-modular'
 
-// create a module
+// create an object containing the logic (actions, reducer, selectors)
 
-const createCounter = modularize({
+const counterLogic = {
   actions: {
     increment: () => null,
     decrement: () => null,
@@ -42,13 +42,13 @@ const createCounter = modularize({
   selectors: localStateSelector => ({
     counterValue: localStateSelector
   })
-})
+}
 
-// instantiate the module with the path
+// mount the logic to its redux path
 
-const myCounter = createCounter('myCounter')
+const myCounter = mount('myCounter', counterLogic)
 
-// mount instance to root reducer
+// add reducer to root reducer
 
 const rootReducer = combineReducers({
   myCounter: myCounter.reducer

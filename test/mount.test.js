@@ -2,16 +2,15 @@
 
 import { combineReducers } from 'redux'
 import createReducer from '../src/create-reducer'
-import modularize from '../src/modularize'
+import mount from '../src/mount'
 
 it('enables dynamic modularization of actions', () => {
-  const createLogic = modularize({
+  const logic = mount('path.to.module', {
     actions: {
       increment: () => null
     }
   })
 
-  const logic = createLogic('path.to.module')
   expect(logic).toHaveProperty('actions')
   expect(logic.actions).toHaveProperty('increment')
   expect(
@@ -20,7 +19,7 @@ it('enables dynamic modularization of actions', () => {
 })
 
 it('enables dynamic modularization of reducers to actions', () => {
-  const createLogic = modularize({
+  const logic = mount('path.to.module', {
     actions: {
       increment: () => null
     },
@@ -33,7 +32,6 @@ it('enables dynamic modularization of reducers to actions', () => {
       })
     }
   })
-  const logic = createLogic('path.to.module')
   expect(logic).toHaveProperty('reducer')
 
   const { reducer, actions } = logic
@@ -44,25 +42,25 @@ it('enables dynamic modularization of reducers to actions', () => {
 
 it('enables dynamic modularization of selectors', () => {
   ['nested.path', ['nested', 'path']].forEach(pathString => {
-    const logic = modularize({
+    const logic = mount(pathString, {
       selectors: localSelector => ({
         mySelector: state => localSelector(state)
       })
-    })(pathString)
+    })
 
     expect(logic).toHaveProperty('selectors')
     expect(logic.selectors).toHaveProperty('mySelector')
     const state = {
       nested: {
-        path: { modularized: 'state' }
+        path: { mountd: 'state' }
       }
     }
-    expect(logic.selectors.mySelector(state)).toEqual({ modularized: 'state' })
+    expect(logic.selectors.mySelector(state)).toEqual({ mountd: 'state' })
   })
 })
 
 it('throws an error if no params are passed', () => {
   expect(() => {
-    modularize()
+    mount()
   }).toThrow(Error)
 })
