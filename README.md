@@ -26,19 +26,22 @@ import { mount, createReducer } from 'redux-modular'
 
 // create an object containing the logic (actions, reducer, selectors)
 
-const counterLogic = {
+const counter = {
+  // mapping of action names to optional payload creators
   actions: {
-    increment: () => null,
-    decrement: () => null,
+    increment: null,
+    decrement: null,
     set: value => value
   },
 
+  // function mapping actions to your reducer
   reducer: actions => createReducer(0, {
     [actions.increment]: state => state + 1,
     [actions.decrement]: state => state - 1,
     [actions.set]: (_, value) => value
   }),
 
+  // function mapping local state selector to selectors
   selectors: localStateSelector => ({
     counterValue: localStateSelector
   })
@@ -46,7 +49,7 @@ const counterLogic = {
 
 // mount the logic to its redux path
 
-const myCounter = mount('myCounter', counterLogic)
+const myCounter = mount('myCounter', counter)
 
 // add reducer to root reducer
 

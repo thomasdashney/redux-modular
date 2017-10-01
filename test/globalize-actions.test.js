@@ -4,13 +4,13 @@ import globalizeActions from '../src/globalize-actions'
 
 it('creates actions with types including the state path', () => {
   let actions = globalizeActions('path.to.state', {
-    increment: () => null
+    increment: null
   })
   expect(actions).toHaveProperty('increment')
   expect(actions.increment.toString()).toEqual('increment (path.to.state)')
 
   actions = globalizeActions(['path', 'to', 'state'], {
-    increment: () => null
+    increment: null
   })
   expect(actions.increment.toString()).toEqual('increment (path.to.state)')
 })
