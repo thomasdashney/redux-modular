@@ -4,7 +4,7 @@ import { combineReducers } from 'redux'
 import createReducer from '../src/create-reducer'
 import mount from '../src/mount'
 
-it('enables dynamic modularization of actions', () => {
+it('mounts redux path to action types', () => {
   const logic = mount('path.to.module', {
     actions: {
       increment: () => null
@@ -18,7 +18,7 @@ it('enables dynamic modularization of actions', () => {
   ).toEqual('increment (path.to.module)')
 })
 
-it('enables dynamic modularization of reducers to actions', () => {
+it('configures the reducer with the mounted actions', () => {
   const logic = mount('path.to.module', {
     actions: {
       increment: () => null
@@ -40,7 +40,7 @@ it('enables dynamic modularization of reducers to actions', () => {
   expect(reducer({ value: 5 }, { type: 'SET_TO_0' })).toEqual({ value: 0 })
 })
 
-it('enables dynamic modularization of selectors', () => {
+it('creates selectors using the correct', () => {
   ['nested.path', ['nested', 'path']].forEach(pathString => {
     const logic = mount(pathString, {
       selectors: localSelector => ({
@@ -52,15 +52,13 @@ it('enables dynamic modularization of selectors', () => {
     expect(logic.selectors).toHaveProperty('mySelector')
     const state = {
       nested: {
-        path: { mountd: 'state' }
+        path: { some: 'state' }
       }
     }
-    expect(logic.selectors.mySelector(state)).toEqual({ mountd: 'state' })
+    expect(logic.selectors.mySelector(state)).toEqual({ some: 'state' })
   })
 })
 
 it('throws an error if no params are passed', () => {
-  expect(() => {
-    mount()
-  }).toThrow(Error)
+  expect(mount).toThrow(Error)
 })
