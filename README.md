@@ -18,59 +18,67 @@ $ yarn add redux-modular
 
 ## Usage
 
-Creating a module:
+<p align="center">
+  <img src="https://raw.githubusercontent.com/thomasdashney/redux-modular/master/counter-example.png" />
+</p>
 
 ```js
 import { combineReducers, createStore } from 'redux'
 import { mount, createReducer } from 'redux-modular'
 
-// create an object containing the logic (actions, reducer, selectors)
+/* Create an object containing the logic (actions, reducer, selectors) */
 
 const counter = {
   // mapping of action names to optional payload creators
   actions: {
     increment: null,
     decrement: null,
-    set: value => value
+    set: (value) => ({ value })
   },
 
-  // function mapping actions to your reducer
+  // function mapping actions to reducers
   reducer: actions => createReducer(0, {
     [actions.increment]: state => state + 1,
     [actions.decrement]: state => state - 1,
-    [actions.set]: (_, value) => value
+    [actions.set]: (state, payload) => payload.value
   }),
 
-  // function mapping local state selector to selectors
+  // function mapping local state selector to your selectors
   selectors: localStateSelector => ({
-    counterValue: localStateSelector
+    counterValue: state => localStateSelector(state)
   })
 }
 
-// mount the logic to its redux path
+/* Instantiate the counter logic by mounting to redux paths */
 
-const myCounter = mount('myCounter', counter)
+const counter1 = mount('counter1', counter)
+const counter2 = mount('counter2', counter)
+const counter3 = mount(['nested', 'counter3'], counter)
 
-// add reducer to root reducer
+/* Add the reducers to your root reducer */
 
 const rootReducer = combineReducers({
-  myCounter: myCounter.reducer
+  counter1: counter1.reducer,
+  counter2: counter2.reducer,
+  nested: combineReducers({
+    counter3: counter3.reducer
+  })
 })
 
 const store = createStore(rootReducer)
 
-// use actions and selectors in your app
+/* Use actions and selectors for each counter instance in your app */
 
-const { actions, selectors } = myCounter
+const { actions, selectors } = counter1
 
-selectors.counterValue(store.getState()) // 0
+console.log(selectors.counterValue(store.getState())) // prints `0`
 
 store.dispatch(actions.increment())
-selectors.counterValue(store.getState()) // 1
+console.log(selectors.counterValue(store.getState())) // prints `1`
 
 store.dispatch(actions.decrement())
-selectors.counterValue(store.getState()) // 0
+console.log(selectors.counterValue(store.getState())) // prints `0`
 
 store.dispatch(actions.set(5))
-selectors.counterValue(store.getState()) // 5
+console.log(selectors.counterValue(store.getState())) // prints `5`
 ```
