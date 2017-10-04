@@ -40,8 +40,8 @@ it('configures the reducer with the mounted actions', () => {
   expect(reducer({ value: 5 }, { type: 'SET_TO_0' })).toEqual({ value: 0 })
 })
 
-it('creates selectors using the correct', () => {
-  ['nested.path', ['nested', 'path']].forEach(pathString => {
+it('creates selectors using the correct state selector', () => {
+  ['nested.path', ['nested', 'path'],].forEach(pathString => {
     const logic = mount(pathString, {
       selectors: localSelector => ({
         mySelector: state => localSelector(state)
@@ -57,6 +57,21 @@ it('creates selectors using the correct', () => {
     }
     expect(logic.selectors.mySelector(state)).toEqual({ some: 'state' })
   })
+})
+
+it('can create selectors with pathToState of null', () => {
+  const logic = mount(null, {
+    selectors: localSelector => ({
+      mySelector: state => localSelector(state).value
+    })
+  })
+
+  expect(logic).toHaveProperty('selectors')
+  expect(logic.selectors).toHaveProperty('mySelector')
+  const state = {
+    value: 'test'
+  }
+  expect(logic.selectors.mySelector(state)).toEqual('test')
 })
 
 it('throws an error if no params are passed', () => {

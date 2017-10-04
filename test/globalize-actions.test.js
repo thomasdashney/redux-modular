@@ -28,10 +28,17 @@ it('creates actions with payload creators', () => {
   })
 })
 
+it('does not include the state path if pathToState is null', () => {
+  let actions = globalizeActions(null, {
+    increment: null
+  })
+  expect(actions).toHaveProperty('increment')
+  expect(actions.increment.toString()).toEqual('increment')
+})
+
 it('throws an error if pathToState is invalid', () => {
   const actions = { increment: () => null }
 
-  expect(() => globalizeActions(null, actions)).toThrow()
   expect(() => globalizeActions(5, actions)).toThrow()
   expect(() => globalizeActions({}, actions)).toThrow()
 })

@@ -10,12 +10,12 @@ const isString = value => typeof value === 'string'
 export default (pathToState, actions) => {
   if (isArray(pathToState)) {
     pathToState = pathToState.join('.')
-  } else if (!isString(pathToState)) {
+  } else if (pathToState !== null && !isString(pathToState)) {
     throw new Error('path must be a string or array')
   }
 
   return Object.keys(actions).reduce((prev, key) => {
-    const type = `${key} (${pathToState})`
+    const type = pathToState ? `${key} (${pathToState})` : key
 
     return Object.assign({}, prev, {
       [key]: createAction(type, actions[key])
