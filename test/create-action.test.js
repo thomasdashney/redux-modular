@@ -11,6 +11,15 @@ it('creates an FSA-compliant action creator', () => {
   })
 })
 
+it('allows null to be passed as the payload creator', () => {
+  const someAction = createAction('SOME_TYPE', null)
+
+  expect(someAction()).toEqual({
+    type: 'SOME_TYPE',
+    payload: null
+  })
+})
+
 it('creates the action using optional payload creator', () => {
   const someAction = createAction(
     'SOME_TYPE',

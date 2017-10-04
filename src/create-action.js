@@ -1,4 +1,8 @@
-export default (type, payloadCreator = () => null) => {
+export default (type, payloadCreator) => {
+  if (!payloadCreator) {
+    payloadCreator = () => null
+  }
+
   const actionCreator = (...params) => ({
     type,
     payload: payloadCreator(...params)
