@@ -82,3 +82,30 @@ console.log(selectors.counterValue(store.getState())) // prints `0`
 store.dispatch(actions.set(5))
 console.log(selectors.counterValue(store.getState())) // prints `5`
 ```
+
+## Writing Tests
+
+If you `mount` your logic to a path of `null`, you can test your state logic without any assumption of where it sits in your redux state.
+
+```js
+/* eslint-env jest */
+
+const counter = require('./counter')
+
+const { actions, reducer, selectors } = mount(null, counter)
+
+it('can increment', () => {
+  const state = reducer(0, actions.increment())
+  expect(selectors.counterValue(state)).toEqual(1)
+})
+
+it('can decrement', () => {
+  const state = reducer(0, actions.decrement())
+  expect(selectors.counterValue(state)).toEqual(-1)
+})
+
+it('can be set to a number', () => {
+  const state = reducer(0, actions.set(5))
+  expect(selectors.counterValue(state)).toEqual(5)
+})
+```
