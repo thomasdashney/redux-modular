@@ -17,7 +17,7 @@
     "modular"
   ],
   "author": "Thomas Dashney",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/thomasdashney/redux-modular/issues"
   },
