@@ -3,10 +3,14 @@ export default (type, payloadCreator) => {
     payloadCreator = () => null
   }
 
-  const actionCreator = (...params) => ({
-    type,
-    payload: payloadCreator(...params)
-  })
+  const actionCreator = (...params) => {
+    const payload = payloadCreator(...params)
+    return {
+      type,
+      payload,
+      error: payload instanceof Error ? true : undefined
+    }
+  }
 
   actionCreator.toString = () => type
 

@@ -41,3 +41,13 @@ it('exposes the action type via toString', () => {
   const TYPE = 'SOME_TYPE'
   expect(createAction(TYPE).toString()).toEqual(TYPE)
 })
+
+it('sets error to true if the payload is an instance of Error', () => {
+  const someAction = createAction(
+    'SOME_TYPE',
+    value => value
+  )
+
+  expect(someAction('not an error').error).toBeUndefined()
+  expect(someAction(new Error('Something happened')).error).toEqual(true)
+})
