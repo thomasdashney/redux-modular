@@ -1,4 +1,4 @@
-export default (initialState, reducersByAction) => {
+export default function createReducer (initialState, reducersByAction) {
   const reducer = (state = initialState, action) => {
     const { type } = action
 

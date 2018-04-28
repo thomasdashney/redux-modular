@@ -1,4 +1,4 @@
-export default (type, payloadCreator) => {
+export default function createAction (type, payloadCreator) {
   if (!payloadCreator) {
     payloadCreator = () => null
   }

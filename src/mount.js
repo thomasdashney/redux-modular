@@ -1,7 +1,7 @@
 import get from 'lodash.get'
 import globalizeActions from './globalize-actions'
 
-export default (pathToState, logic) => {
+export default function (pathToState, logic) {
   if (!logic) {
     throw new Error('logic must be passed to mount')
   }

@@ -7,7 +7,7 @@ const isArray = value => {
 }
 const isString = value => typeof value === 'string'
 
-export default (pathToState, actions) => {
+export default function globalizeActions (pathToState, actions) {
   if (isArray(pathToState)) {
     pathToState = pathToState.join('.')
   } else if (pathToState !== null && !isString(pathToState)) {
