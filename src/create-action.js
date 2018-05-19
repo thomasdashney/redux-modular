@@ -5,11 +5,13 @@ export default function createAction (type, payloadCreator) {
 
   const actionCreator = (...params) => {
     const payload = payloadCreator(...params)
-    return {
-      type,
-      payload,
-      error: payload instanceof Error ? true : undefined
+    const action = { type, payload }
+
+    if (payload instanceof Error) {
+      action.error = true
     }
+
+    return action
   }
 
   actionCreator.toString = () => type
