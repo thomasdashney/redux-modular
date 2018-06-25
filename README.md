@@ -64,20 +64,7 @@ console.log(increment.toString()) // increment
 
 #### `createActions(Object actionsToPayloadCreators, [String|Array pathToState])`
 
-Combined with `createAction`, you can quickly generate an object of action creators:
-
-```js
-import { createType, createAction } from 'redux-modular'
-
-const COUNTER_TYPE = createType('counter')
-const counterActions = {
-  increment: createAction(COUNTER_TYPE('increment')),
-  decrement: createAction(COUNTER_TYPE('decrement')),
-  setValue: createAction(COUNTER_TYPE('setValue'), value => ({ value }))
-}
-```
-
-`createActions` can be used to simplify the above:
+`createActions` combines `createAction` and `createType`, allowing you to quickly generate an object of action creators:
 
 ```js
 import { createActions } from 'redux-modular'
