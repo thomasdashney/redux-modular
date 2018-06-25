@@ -50,10 +50,10 @@ defines [FSA-compliant](https://github.com/redux-utilities/flux-standard-action)
 import { createAction } from 'redux-modular'
 
 const increment = createAction('increment')
-console.log(increment()) // { type: 'INCREMENT' }
+console.log(increment()) // { type: 'increment' }
 
 const setValue = createAction('setValue', value => ({ value })
-console.log(setValue()) // { type: 'SET_VALUE', payload: {  } }
+console.log(setValue()) // { type: 'setValue', payload: {  } }
 ```
 
 The action type for a given action creator can be provided by calling `toString()` on the action creator:
