@@ -39,7 +39,7 @@ import { createType } from 'redux-modular'
 const COUNTER_TYPE = createType('counter')
 
 const INCREMENT_TYPE = COUNTER_TYPE('increment')
-console.log(INCREMENT_TYPE) // prints `increment (counter)`
+console.log(INCREMENT_TYPE) // increment (counter)
 ```
 
 #### `createAction(String|Array pathToState, [Function payloadCreator])`
@@ -50,16 +50,16 @@ defines [FSA-compliant](https://github.com/redux-utilities/flux-standard-action)
 import { createAction } from 'redux-modular'
 
 const increment = createAction('increment')
-console.log(increment()) // prints `{ type: 'INCREMENT' }`
+console.log(increment()) // { type: 'INCREMENT' }
 
 const setValue = createAction('setValue', value => ({ value })
-console.log(setValue()) // prints `{ type: 'SET_VALUE', payload: {  } }`
+console.log(setValue()) // { type: 'SET_VALUE', payload: {  } }
 ```
 
 The action type for a given action creator can be provided by calling `toString()` on the action creator:
 
 ```js
-console.log(increment.toString()) // prints `increment`
+console.log(increment.toString()) // increment
 ```
 
 #### `createActions(Object actionsToPayloadCreators, [String|Array pathToState])`
@@ -104,8 +104,8 @@ const counterReducer = createReducer(0, {
   'setValue': (state, payload) => payload.value
 })
 
-console.log(counterReducer(undefined, { type: '@@INIT' })) // prints initial state of `0`
-console.log(counterReducer(0, { type: 'increment' })) // prints `1`
+console.log(counterReducer(undefined, { type: '@@INIT' })) // 0 (initial state)
+console.log(counterReducer(0, { type: 'increment' })) // 1
 ```
 
 This is very useful if used conjunction with actions created using our actions created using `createAction` or `createActions`:
@@ -117,8 +117,8 @@ const counterReducer = createReducer(0, {
   [counterActions.setValue]: (state, payload) => payload.value
 })
 
-console.log(counterReducer(0, counterActions.increment())) // prints `1`
-console.log(counterReducer(0, counterActions.setValue(5))) // prints `5`
+console.log(counterReducer(0, counterActions.increment())) // 1
+console.log(counterReducer(0, counterActions.setValue(5))) // 5
 ```
 
 ### Defining selectors
@@ -138,7 +138,7 @@ const counterSelectors = createSelectors({
   value: state => state.value
 }, 'counter1')
 
-console.log(counterSelectors.value({ counter1: { value: 5 } })) // prints `5`
+console.log(counterSelectors.value({ counter1: { value: 5 } })) // 5
 ```
 
 If the counter lives multiple levels deep in the redux state, you can use [`lodash.get`](https://lodash.com/docs/4.17.10#get) syntax to pass an array or string path to the state:
@@ -148,7 +148,7 @@ const counterSelectors = createSelectors({
   value: state => state.value
 }, 'nested.counter3')
 
-console.log(counterSelectors.value({ nested: { counter3: { value: 5 } } })) // prints `5`
+console.log(counterSelectors.value({ nested: { counter3: { value: 5 } } })) // 5
 ```
 
 This can also be used with the [`reselect`](https://github.com/reduxjs/reselect) library value to create memoized, computed selector functions:
@@ -166,7 +166,7 @@ const counterSelectors = createSelectors({
   )
 }, 'counter1')
 
-console.log(counterSelectors.asPercentageOfOneHundred({ counter1: { value: 5 } } })) // prints `0.05`
+console.log(counterSelectors.asPercentageOfOneHundred({ counter1: { value: 5 } } })) // 0.05
 ```
 
 ### Defining reusable redux logic
@@ -231,16 +231,16 @@ const store = createStore(rootReducer)
 
 const { actions, selectors } = counter1
 
-console.log(selectors.counterValue(store.getState())) // prints `0`
+console.log(selectors.counterValue(store.getState())) // 0
 
 store.dispatch(actions.increment())
-console.log(selectors.counterValue(store.getState())) // prints `1`
+console.log(selectors.counterValue(store.getState())) // 1
 
 store.dispatch(actions.decrement())
-console.log(selectors.counterValue(store.getState())) // prints `0`
+console.log(selectors.counterValue(store.getState())) // 0
 
 store.dispatch(actions.setValue(5))
-console.log(selectors.counterValue(store.getState())) // prints `5`
+console.log(selectors.counterValue(store.getState())) // 5
 ```
 
 ### Writing Tests
