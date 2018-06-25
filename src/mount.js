@@ -1,7 +1,7 @@
-import get from 'lodash.get'
-import globalizeActions from './globalize-actions'
+import createActions from './action-helpers/create-actions'
+import createSelectors from './selector-helpers/create-selectors'
 
-export default function (pathToState, logic) {
+export default function (logic, pathToState) {
   if (!logic) {
     throw new Error('logic must be passed to mount')
   }
@@ -9,7 +9,7 @@ export default function (pathToState, logic) {
   let { actions, reducer, selectors } = logic
 
   if (actions) {
-    actions = globalizeActions(pathToState, actions)
+    actions = createActions(actions, pathToState)
   }
 
   if (actions && reducer) {
@@ -17,11 +17,7 @@ export default function (pathToState, logic) {
   }
 
   if (selectors) {
-    const localStateSelector = pathToState
-      ? state => get(state, pathToState)
-      : state => state
-
-    selectors = selectors(localStateSelector)
+    selectors = createSelectors(selectors, pathToState)
   }
 
   return {

@@ -1,15 +1,15 @@
 /* eslint-env jest */
 
 import { combineReducers } from 'redux'
-import createReducer from '../src/create-reducer'
+import createReducer from '../src/reducer-helpers/create-reducer'
 import mount from '../src/mount'
 
 it('mounts redux path to action types', () => {
-  const logic = mount('path.to.module', {
+  const logic = mount({
     actions: {
       increment: () => null
     }
-  })
+  }, 'path.to.module')
 
   expect(logic).toHaveProperty('actions')
   expect(logic.actions).toHaveProperty('increment')
@@ -19,7 +19,7 @@ it('mounts redux path to action types', () => {
 })
 
 it('configures the reducer with the mounted actions', () => {
-  const logic = mount('path.to.module', {
+  const logic = mount({
     actions: {
       increment: () => null
     },
@@ -31,7 +31,7 @@ it('configures the reducer with the mounted actions', () => {
         })
       })
     }
-  })
+  }, 'path.to.module')
   expect(logic).toHaveProperty('reducer')
 
   const { reducer, actions } = logic
@@ -41,29 +41,29 @@ it('configures the reducer with the mounted actions', () => {
 })
 
 it('creates selectors using the correct state selector', () => {
-  ['nested.path', ['nested', 'path'],].forEach(pathString => {
-    const logic = mount(pathString, {
-      selectors: localSelector => ({
-        mySelector: state => localSelector(state)
-      })
-    })
+  ['nested.path', ['nested', 'path']].forEach(pathString => {
+    const logic = mount({
+      selectors: {
+        mySelector: state => state.key
+      }
+    }, pathString)
 
     expect(logic).toHaveProperty('selectors')
     expect(logic.selectors).toHaveProperty('mySelector')
     const state = {
       nested: {
-        path: { some: 'state' }
+        path: { key: 'value' }
       }
     }
-    expect(logic.selectors.mySelector(state)).toEqual({ some: 'state' })
+    expect(logic.selectors.mySelector(state)).toEqual('value')
   })
 })
 
-it('can create selectors with pathToState of null', () => {
-  const logic = mount(null, {
-    selectors: localSelector => ({
-      mySelector: state => localSelector(state).value
-    })
+it('can create selectors with no pathToState', () => {
+  const logic = mount({
+    selectors: {
+      mySelector: state => state.value
+    }
   })
 
   expect(logic).toHaveProperty('selectors')

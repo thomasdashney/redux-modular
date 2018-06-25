@@ -1,22 +1,20 @@
 /* eslint-env jest */
 
-import createAction from '../src/create-action'
+import createAction from '../src/action-helpers/create-action'
 
 it('creates an FSA-compliant action creator', () => {
   const someAction = createAction('SOME_TYPE')
 
   expect(someAction()).toEqual({
     type: 'SOME_TYPE',
-    payload: null
+    payload: undefined
   })
-})
 
-it('allows null to be passed as the payload creator', () => {
-  const someAction = createAction('SOME_TYPE', null)
+  const nullPayloadCreator = createAction('SOME_TYPE')
 
-  expect(someAction()).toEqual({
+  expect(nullPayloadCreator()).toEqual({
     type: 'SOME_TYPE',
-    payload: null
+    payload: undefined
   })
 })
 
