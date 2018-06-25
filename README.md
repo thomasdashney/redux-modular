@@ -29,7 +29,7 @@ This guide illustrates how to use each helper function using a `counter` redux s
 
 ### Defining actions
 
-#### `createType(String|Array pathToState)`
+#### `createType(String|Array<String> pathToState)`
 
 `createType` allows you to create a **type creator**, allowing you to easily create types under a unique namespace:
 
@@ -42,7 +42,7 @@ const INCREMENT_TYPE = COUNTER_TYPE('increment')
 console.log(INCREMENT_TYPE) // increment (counter)
 ```
 
-#### `createAction(String|Array pathToState, [Function payloadCreator])`
+#### `createAction(String|Array<String> pathToState, [Function payloadCreator])`
 
 defines [FSA-compliant](https://github.com/redux-utilities/flux-standard-action) action creators using `createAction`:
 
@@ -62,7 +62,7 @@ The action type for a given action creator can be provided by calling `toString(
 console.log(increment.toString()) // increment
 ```
 
-#### `createActions(Object actionsToPayloadCreators, [String|Array pathToState])`
+#### `createActions(Object actionsToPayloadCreators, [String|Array<String> pathToState])`
 
 `createActions` combines `createAction` and `createType`, allowing you to quickly generate an object of action creators:
 
@@ -112,7 +112,7 @@ console.log(counterReducer(0, counterActions.setValue(5))) // 5
 
 Rather than having to select data directly from the redux state tree, you can define "selector" functions. These can help to increase code maintainability by reducing access to redux state to these functions, serving as a public API to the state tree.
 
-`createSelectors(Object selectorFunctions, [String|Array pathToState])`
+`createSelectors(Object selectorFunctions, [String|Array<String> pathToState])`
 
 This function can be used to create an object of selector functions. Given a path to the state, which will be run through [`lodash.get`](https://lodash.com/docs/4.17.10#get), and an object of selector functions, it will return a new object of selector functions. The returned selector functions will first run `lodash.get(state, 'some.path')`, and then pass this value to your provided selector function. This can be useful for easily defining selectors.
 
