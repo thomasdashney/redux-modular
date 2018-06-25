@@ -191,9 +191,9 @@ const counter = {
   }),
 
   // function mapping local state selector to your selectors
-  selectors: localStateSelector => ({
-    counterValue: state => localStateSelector(state)
-  })
+  selectors: {
+    counterValue: state => state
+  }
 }
 
 /* Instantiate the counter logic by mounting to redux paths */
