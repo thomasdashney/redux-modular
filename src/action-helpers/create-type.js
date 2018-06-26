@@ -1,19 +1,24 @@
 import { isString, isArray } from '../utils'
 
 export default function createType (pathToState) {
-  if (!pathToState) {
-    throw new InvalidArgError()
-  } else if (isArray(pathToState)) {
-    if (!pathToState.every(isString)) {
-      throw new InvalidArgError()
-    }
+  validateArgument(pathToState)
 
+  if (isArray(pathToState)) {
     pathToState = pathToState.join('.')
-  } else if (pathToState !== null && !isString(pathToState)) {
-    throw new InvalidArgError()
   }
 
   return type => `${type} (${pathToState})`
+}
+
+const validArgumentTests = [
+  isString,
+  pathToState => isArray(pathToState) && pathToState.every(isString)
+]
+
+function validateArgument (pathToState) {
+  if (validArgumentTests.every(test => !test(pathToState))) {
+    throw new InvalidArgError()
+  }
 }
 
 class InvalidArgError extends Error {

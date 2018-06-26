@@ -2,10 +2,10 @@
 
 import { combineReducers } from 'redux'
 import createReducer from '../src/reducer-helpers/create-reducer'
-import mount from '../src/mount'
+import createLogic from '../src/create-logic'
 
-it('mounts redux path to action types', () => {
-  const logic = mount({
+it('createLogics redux path to action types', () => {
+  const logic = createLogic({
     actions: {
       increment: () => null
     }
@@ -18,8 +18,8 @@ it('mounts redux path to action types', () => {
   ).toEqual('increment (path.to.module)')
 })
 
-it('configures the reducer with the mounted actions', () => {
-  const logic = mount({
+it('configures the reducer with the createLogiced actions', () => {
+  const logic = createLogic({
     actions: {
       increment: () => null
     },
@@ -42,7 +42,7 @@ it('configures the reducer with the mounted actions', () => {
 
 it('creates selectors using the correct state selector', () => {
   ['nested.path', ['nested', 'path']].forEach(pathString => {
-    const logic = mount({
+    const logic = createLogic({
       selectors: {
         mySelector: state => state.key
       }
@@ -60,7 +60,7 @@ it('creates selectors using the correct state selector', () => {
 })
 
 it('can create selectors with no pathToState', () => {
-  const logic = mount({
+  const logic = createLogic({
     selectors: {
       mySelector: state => state.value
     }
@@ -75,5 +75,5 @@ it('can create selectors with no pathToState', () => {
 })
 
 it('throws an error if no params are passed', () => {
-  expect(mount).toThrow(Error)
+  expect(createLogic).toThrow(Error)
 })

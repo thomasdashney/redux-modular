@@ -3,7 +3,7 @@ import createSelectors from './selector-helpers/create-selectors'
 
 export default function (logic, pathToState) {
   if (!logic) {
-    throw new Error('logic must be passed to mount')
+    throw new Error('logic must be passed to create-logic')
   }
 
   let { actions, reducer, selectors } = logic
