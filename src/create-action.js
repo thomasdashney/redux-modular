@@ -15,6 +15,7 @@ export default function createAction (type, payloadCreator) {
   }
 
   actionCreator.toString = () => type
+  actionCreator.payloadCreator = payloadCreator
 
   return actionCreator
 }

@@ -1,11 +1,5 @@
-import createAction from './create-action'
-
-const isArray = value => {
-  return typeof value === 'object' &&
-         value !== null &&
-         value.constructor === Array
-}
-const isString = value => typeof value === 'string'
+import createAction from '../create-action'
+import { isArray, isString } from '../util/type-utils'
 
 export default function globalizeActions (pathToState, actions) {
   if (isArray(pathToState)) {

@@ -1,8 +1,8 @@
 /* eslint-env jest */
 
 import { combineReducers } from 'redux'
-import createReducer from '../src/create-reducer'
-import mount from '../src/mount'
+import createReducer from '../../src/create-reducer'
+import mount from '../../src/mount'
 
 it('mounts redux path to action types', () => {
   const logic = mount('path.to.module', {

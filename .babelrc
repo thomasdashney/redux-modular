@@ -1,5 +1,8 @@
 {
   "ignore": [],
+  "plugins": [
+    "dev-expression"
+  ],
   "env": {
     "test": {
       "presets": [

@@ -1,7 +1,10 @@
 import get from 'lodash.get'
+import warning from 'warning'
 import globalizeActions from './globalize-actions'
 
 export default function (pathToState, logic) {
+  warning(true, 'redux-modular mount() is deprecated')
+
   if (!logic) {
     throw new Error('logic must be passed to mount')
   }

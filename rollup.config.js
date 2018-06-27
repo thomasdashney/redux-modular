@@ -12,5 +12,5 @@ export default {
       exclude: 'node_modules/**' // only transpile our source code
     })
   ],
-  external: ['lodash.get']
+  external: ['lodash.get', 'warning']
 }

@@ -1,6 +1,6 @@
 /* eslint-env jest */
 
-import globalizeActions from '../src/globalize-actions'
+import globalizeActions from '../../src/mount/globalize-actions'
 
 it('creates actions with types including the state path', () => {
   let actions = globalizeActions('path.to.state', {
