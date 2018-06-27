@@ -4,6 +4,15 @@ Helpers for scaling and abstracting redux by co-locating actions, reducers and s
 
 [![Build Status](https://travis-ci.org/thomasdashney/redux-modular.svg?branch=master)](https://travis-ci.org/thomasdashney/redux-modular) [![Test Coverage](https://codeclimate.com/github/thomasdashney/redux-modular/badges/coverage.svg)](https://codeclimate.com/github/thomasdashney/redux-modular/coverage) [![Code Climate](https://codeclimate.com/github/thomasdashney/redux-modular/badges/gpa.svg)](https://codeclimate.com/github/thomasdashney/redux-modular)
 
+* [Install](#install)
+* [Usage Guide](#usage-guide)
+  * [Defining actions](#defining-actions)
+  * [Defining reducers](#defining-reducers)
+  * [Defining selectors](#defining-selectors)
+  * [Defining reusable redux logic](#defining-reusable-redux-logic)
+  * [Writing tests](#writing-tests)
+* [API](#api)
+
 ## Install
 
 ```
@@ -18,7 +27,9 @@ $ yarn add redux-modular
 
 ## Usage Guide
 
-This guide uses a counter as an example, which starts at 0 and ends at 10. If you try to `increment` past the 10, it will stay at 10. Likewise, a `decrement` to below 0 will keep it at 0. Two selectors are provided: `value` which gets the current value of the counter, and `percentage`, which calcualtes the percentage of completion. Finally, there is a `reset` action for resetting back to the initial state of `0`.
+This guide uses a counter as an example, which starts at 0 and ends at 10. If you try to `increment` past the 10, it will stay at 10. Likewise, a `decrement` to below 0 will keep it at 0.
+
+Two selectors are provided: `value` which gets the current value of the counter, and `isComplete`, which return `true` if the counter has reached 10 (the maximum). Finally, there is a `reset` action for resetting back to the initial state of `0`.
 
 Here is how one might implement this using plain redux:
 
@@ -56,7 +67,7 @@ const counterReducer = (state = INITIAL_STATE, action) => {
 
 const counterSelectors = {
   value: state => state.counter,
-  percentage: state => state.counter / COUNTER_MAX
+  isComplete: state => state.counter === COUNTER_MAX
 }
 
 // then the reducer would be mounted to the store at `state.counter`:
@@ -68,20 +79,22 @@ const store = createStore(
 )
 
 counterSelectors.value(store.getState()) // 0
-store.dispatch(counterActions.increment(2))
-counterSelectors.value(store.getState()) // 2
-counterSelectors.percentage(store.getState()) // 0.2
+counterSelectors.isComplete(store.getState()) // true
+
+store.dispatch(counterActions.increment(10))
+counterSelectors.value(store.getState()) // 10
+counterSelectors.isComplete(store.getState()) // true
+
+store.dispatch(counterActions.decrement(9))
+counterSelectors.value(store.getState()) // 9
+counterSelectors.isComplete(store.getState()) // false
+
 store.dispatch(counterActions.reset())
 counterSelectors.value(store.getState()) // 0
+counterSelectors.isComplete(store.getState()) // false
 ```
 
 Each section in this guide shows how each `redux-modular` helper function can be used to reduce code repetition and boilerplate.
-
-* [Defining actions](#defining-actions)
-* [Defining reducers](#defining-reducers)
-* [Defining selectors](#defining-selectors)
-* [Defining reusable redux logic](#defining-reusable-redux-logic)
-* [Writing tests](#writing-tests)
 
 ### Defining actions
 
@@ -134,7 +147,8 @@ import { createActions, mountActions } from 'redux-modular'
 
 const counterActions = mountActions('counter', createActions({
   increment: null,
-  decrement: null
+  decrement: null,
+  reset
 }))
 ```
 
@@ -160,22 +174,32 @@ Note that, because we passed the action creators directly as the object keys, th
 
 ### Defining selectors
 
-The `mountSelectors` helper removes the boilerplate of selecting the state managed by our reducer (`state.counter`):
+`mountSelector` will wrap a selector with a selector which first selects the state at a provided path:
+
+```js
+const isCompleteSelector = mountSelector('counter', counterState => counterState === COUNTER_MAX)
+
+isCompleteSelector({ counter: 5 }) // 5
+```
+
+`mountSelectors` allows you to mount multiple selectors at once:
 
 ```js
 const counterSelectors = mountSelectors('counter', {
   value: counterState => counterState,
-  percentage: counterState => counterState / COUNTER_MAX
+  isComplete: counterState => counterState === COUNTER_MAX
 }
 ```
 
 If our logic lives multiple levels deep in the redux state tree, you can use [lodash.get](https://lodash.com/docs/4.17.10#get) syntax to perform a deep select:
 
 ```js
-const counterSelectors = mountSelectors('path.to.counter', {
+const counterSelectors = mountSelectors('path.counter', {
   value: counterState => counterState,
-  percentage: counterState => counterState / COUNTER_MAX
+  isComplete: counterState => counterState === COUNTER_MAX
 }
+
+counterSelectors.value({ nested: { counter: 5 } }) // 5
 ```
 
 ### Defining reusable redux logic
@@ -202,7 +226,7 @@ const counterReducer = createReducer(INITIAL_STATE, {
 
 const counterSelector = mountSelectors('counter', {
   value: counterState => counterState,
-  percentage: counterState => counterState / COUNTER_MAX
+  percentage: counterState => counterState === COUNTER_MAX
 })
 ```
 
@@ -229,7 +253,7 @@ export default function createCounterLogic (path, counterMax) {
 
   const counterSelector = mountSelectors('counter', {
     value: counterState => counterState,
-    percentage: counterState => counterState / counterMax
+    percentage: counterState => counterState === counterMax
   })
 
   return {
@@ -240,7 +264,7 @@ export default function createCounterLogic (path, counterMax) {
 }
 ```
 
-Now, we can quickly and easily mount this to multiple places in our redux state tree:
+Now, we can quickly and easily instantiate our logic and mount it multiple places in our redux state tree:
 
 ```js
 import { createStore,combineReducers } from 'redux'
@@ -260,8 +284,26 @@ const store = createStore(
 
 store.dispatch(counterTo5.actions.increment(5))
 counterTo5.selectors.value(store.getState()) // 5
+counterTo5.selectors.isComplete(store.getState()) // true
 
-counterTo10.selectors.percentage(store.getState()) // 0
-store.dispatch(counterTo10.actions.increment(10))
-counterTo10.selectors.percentage(store.getState()) // 1
+counterTo10.selectors.isComplete(store.getState()) // false
+store.dispatch(counterTo5.actions.increment(10))
+counterTo10.selectors.value(store.getState()) // 10
+counterTo10.selectors.isComplete(store.getState()) // true
 ```
+
+## API
+
+`createAction(String type, [Function payloadCreator]) : ActionCreator`
+
+`createActions(Object<String type, Function payloadCreator> payloadCreatorMap) : Object<String, ActionCreator>`
+
+`mountAction(String|Array<String> path, ActionCreator actionCreator) : ActionCreator`
+
+`mountActions(Object<String, ActionCreator> actionCreatorMap) : Object<String, ActionCreator>`
+
+`createReducer(Any initialState, Object<String type, Function reducer>) : Function reducer`
+
+`mountSelector(String|Array<String> path, Function selector) : Function selector`
+
+`mountSelectors(String|Array<String> path, Object<String, Function selector> selectorMap) : Object<String, Function selector>`
