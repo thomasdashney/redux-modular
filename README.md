@@ -138,7 +138,7 @@ const counterActions = mountActions('counter', createActions({
 }))
 ```
 
-#### Defining reducers
+### Defining reducers
 
 `createReducer` creates a reducer which switches based on action type, and passes the action `payload` directly to your sub-reducer function:
 
@@ -158,7 +158,7 @@ const counterReducer = createReducer(INITIAL_STATE, {
 
 Note that, because we passed the action creators directly as the object keys, the `toString()` function will be called on them automatically.
 
-#### Defining selectors
+### Defining selectors
 
 The `mountSelectors` helper removes the boilerplate of selecting the state managed by our reducer (`state.counter`):
 
@@ -178,7 +178,7 @@ const counterSelectors = mountSelectors('path.to.counter', {
 }
 ```
 
-#### Defining reusable redux logic
+### Defining reusable redux logic
 
 Putting the above examples together, we have reduced much boilerplate & repetition:
 
