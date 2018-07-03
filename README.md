@@ -146,8 +146,8 @@ Finally, we can use the `createActions` and `mountActions` helpers to reduce all
 import { createActions, mountActions } from 'redux-modular'
 
 const counterActions = mountActions('counter', createActions({
-  increment: null,
-  decrement: null,
+  increment: (value = 1) => ({ value }),
+  decrement: (value = 1) => ({ value }),
   reset
 }))
 ```
@@ -214,8 +214,8 @@ const COUNTER_MIN = 0
 const COUNTER_MAX = 10
 
 const counterActions = mountActions('counter', createActions({
-  increment: null,
-  decrement: null
+  increment: (value = 1) => ({ value }),
+  decrement: (value = 1) => ({ value })
 }))
 
 const counterReducer = createReducer(INITIAL_STATE, {
@@ -226,7 +226,7 @@ const counterReducer = createReducer(INITIAL_STATE, {
 
 const counterSelector = mountSelectors('counter', {
   value: counterState => counterState,
-  percentage: counterState => counterState === COUNTER_MAX
+  isComplete: counterState => counterState === COUNTER_MAX
 })
 ```
 
@@ -241,8 +241,8 @@ const COUNTER_MIN = 0
 
 export default function createCounterLogic (path, counterMax) {
   const counterActions = mountActions(path, createActions({
-    increment: null,
-    decrement: null
+    increment: (value = 1) => ({ value }),
+    decrement: (value = 1) => ({ value })
   }))
 
   const counterReducer = createReducer(INITIAL_STATE, {
@@ -251,9 +251,9 @@ export default function createCounterLogic (path, counterMax) {
     [counterActions.reset]: () => INITIAL_STATE
   })
 
-  const counterSelector = mountSelectors('counter', {
+  const counterSelector = mountSelectors(path, {
     value: counterState => counterState,
-    percentage: counterState => counterState === counterMax
+    isComplete: counterState => counterState === counterMax
   })
 
   return {
@@ -290,6 +290,44 @@ counterTo10.selectors.isComplete(store.getState()) // false
 store.dispatch(counterTo5.actions.increment(10))
 counterTo10.selectors.value(store.getState()) // 10
 counterTo10.selectors.isComplete(store.getState()) // true
+```
+
+### Writing Tests
+
+An easy, minimal way to test your logic is by running `actions` through the `reducer`, and making assertions about the return value of `selectors`. Here is an example using our
+"counter" logic:
+
+```js
+import createCounterLogic from './create-counter-logic'
+
+const COUNTER_MAX = 5
+
+const {
+  counterActions,
+  counterSelectors,
+  counterReducer
+} = createCounterLogic(null, COUNTER_MAX)
+
+it('can increment and decrement', () => {
+  let state = counterReducer(undefined, { type: '@@INIT' })
+  expect(counterSelectors.value(state)).toEqual(0)
+  expect(counterSelectors.isComplete(state)).toEqual(false)
+
+  state = counterReducer(state, counterActions.increment())
+  expect(counterSelectors.value(state)).toEqual(1)
+  expect(counterSelectors.isComplete(state)).toEqual(false)
+
+  state = counterReducer(state, counterActions.increment(4))
+  expect(counterSelectors.value(state)).toEqual(5)
+  expect(counterSelectors.isComplete(state)).toEqual(true)
+
+  state = counterReducer(state, counterActions.increment())
+  expect(counterSelectors.value(state)).toEqual(5) // shouldn't be able to increment past 5
+
+  state = counterReducer(state, counterActions.increment())
+  expect(counterSelectors.value(state)).toEqual(4)
+  expect(counterSelectors.isComplete(state)).toEqual(false)
+})
 ```
 
 ## API
