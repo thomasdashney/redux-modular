@@ -2,7 +2,7 @@
 
 Helpers for scaling and abstracting redux by co-locating actions, reducers and selectors.
 
-[![Build Status](https://travis-ci.org/thomasdashney/redux-modular.svg?branch=master)](https://travis-ci.org/thomasdashney/redux-modular) [![Test Coverage](https://codeclimate.com/github/thomasdashney/redux-modular/badges/coverage.svg)](https://codeclimate.com/github/thomasdashney/redux-modular/coverage) [![Code Climate](https://codeclimate.com/github/thomasdashney/redux-modular/badges/gpa.svg)](https://codeclimate.com/github/thomasdashney/redux-modular)
+[![Build Status](https://travis-ci.org/thomasdashney/redux-modular.svg?branch=master)](https://travis-ci.org/thomasdashney/redux-modular) [![Test Coverage](https://co`dec`limate.com/github/thomasdashney/redux-modular/badges/coverage.svg)](https://codeclimate.com/github/thomasdashney/redux-modular/coverage) [![Code Climate](https://codeclimate.com/github/thomasdashney/redux-modular/badges/gpa.svg)](https://codeclimate.com/github/thomasdashney/redux-modular)
 
 * [Install](#install)
 * [Usage Guide](#usage-guide)
@@ -27,7 +27,7 @@ $ yarn add redux-modular
 
 ## Usage Guide
 
-This guide uses a counter as an example, which starts at 0 and ends at 10. If you try to `increment` past the 10, it will stay at 10. Likewise, a `decrement` to below 0 will keep it at 0.
+This guide uses a counter as an example, which starts at 0 and ends at 10. If you try to `increment` past the 10, it will stay at 10.
 
 Two selectors are provided: `value` which gets the current value of the counter, and `isComplete`, which return `true` if the counter has reached 10 (the maximum). Finally, there is a `reset` action for resetting back to the initial state of `0`.
 
@@ -37,27 +37,22 @@ Here is how one might implement this using plain redux:
 import { createStore, combineReducers } from 'redux'
 
 const INITIAL_STATE = 0
-const COUNTER_MIN = 0
 const COUNTER_MAX = 10
 
 const COUNTER_TYPES = {
   INCREMENT: 'increment (counter)',
-  DECREMENT: 'decrement (counter)',
   RESET: 'reset (counter)'
 }
 
 const counterActions = {
-  increment: (amount = 1) => ({ type: COUNTER_TYPES.INCREMENT, payload: amount }),
-  decrement: (amount = 1) => ({ type: COUNTER_TYPES.DECREMENT, payload: amount }),
+  increment: (amount = 1) => ({ type: COUNTER_TYPES.INCREMENT, payload: { amount } }),
   reset: () => ({ type: COUNTER_TYPES.RESET })
 }
 
 const counterReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case COUNTER_TYPES.INCREMENT:
-      return Math.min(state + action.payload, COUNTER_MAX)
-    case COUNTER_TYPES.DECREMENT:
-      return Math.max(state - action.payload, COUNTER_MIN)
+      return Math.min(state + action.payload.amount, COUNTER_MAX)
     case COUNTER_TYPES.RESET:
       return INITIAL_STATE
     default:
@@ -85,10 +80,6 @@ store.dispatch(counterActions.increment(10))
 counterSelectors.value(store.getState()) // 10
 counterSelectors.isComplete(store.getState()) // true
 
-store.dispatch(counterActions.decrement(9))
-counterSelectors.value(store.getState()) // 9
-counterSelectors.isComplete(store.getState()) // false
-
 store.dispatch(counterActions.reset())
 counterSelectors.value(store.getState()) // 0
 counterSelectors.isComplete(store.getState()) // false
@@ -104,8 +95,7 @@ Using `createAction`, we can easily define `FSA-Compliant` action creator:
 import { createAction } from 'redux-modular'
 
 const counterActions = {
-  increment: createAction(COUNTER_TYPES.INCREMENT, (value = 1) => ({ value })),
-  decrement: createAction(COUNTER_TYPES.DECREMENT, (value = 1) => ({ value })),
+  increment: createAction(COUNTER_TYPES.INCREMENT, (amount = 1) => ({ amount })),
   reset: createAction(COUNTER_TYPES.RESET)
 }
 ```
@@ -116,8 +106,7 @@ const counterActions = {
 import { createAction } from 'redux-modular'
 
 const counterActions = {
-  increment: createAction('increment (counter)', (value = 1) => ({ value })),
-  decrement: createAction('decrement (counter)', (value = 1) => ({ value })),
+  increment: createAction('increment (counter)', (amount = 1) => ({ amount })),
   reset: createAction('reset (counter)')
 }
 
@@ -133,9 +122,8 @@ const namespace = 'counter'
 
 const counterActions = {
   increment: mountAction(namespace, createAction('increment', (value = 1) => ({ value })))
-  decrement: mountAction(namespace, createAction('decrement', (value = 1) => ({ value })),
-  reset: mountAcgtion(createAction('reset')
-}
+  reset: mountAction(createAction('reset')
+})
 
 counterActions.increment.toString() // 'increment (counter)'
 ```
@@ -147,7 +135,6 @@ import { createActions, mountActions } from 'redux-modular'
 
 const counterActions = mountActions('counter', createActions({
   increment: (value = 1) => ({ value }),
-  decrement: (value = 1) => ({ value }),
   reset
 }))
 ```
@@ -160,12 +147,10 @@ const counterActions = mountActions('counter', createActions({
 import { createReducer } from 'redux-modular'
 
 const INITIAL_STATE = 0
-const COUNTER_MIN = 0
 const COUNTER_MAX = 10
 
 const counterReducer = createReducer(INITIAL_STATE, {
   [counterActions.increment]: (state, payload) => Math.min(state + payload.amount, COUNTER_MAX),
-  [counterActions.decrement]: (state, payload) => Math.max(state + payload.amount, COUNTER_MIN),
   [counterActions.reset]: () => INITIAL_STATE
 })
 ```
@@ -188,7 +173,7 @@ isCompleteSelector({ counter: 5 }) // 5
 const counterSelectors = mountSelectors('counter', {
   value: counterState => counterState,
   isComplete: counterState => counterState === COUNTER_MAX
-}
+})
 ```
 
 If our logic lives multiple levels deep in the redux state tree, you can use [lodash.get](https://lodash.com/docs/4.17.10#get) syntax to perform a deep select:
@@ -197,7 +182,7 @@ If our logic lives multiple levels deep in the redux state tree, you can use [lo
 const counterSelectors = mountSelectors('path.counter', {
   value: counterState => counterState,
   isComplete: counterState => counterState === COUNTER_MAX
-}
+})
 
 counterSelectors.value({ nested: { counter: 5 } }) // 5
 ```
@@ -209,22 +194,20 @@ Putting the above examples together, we have reduced much boilerplate & repetiti
 ```js
 import { createActions, mountActions, createReducer, mountSelectors } from 'redux-modular'
 
+const REDUX_PATH = 'counter'
 const INITIAL_STATE = 0
-const COUNTER_MIN = 0
 const COUNTER_MAX = 10
 
-const counterActions = mountActions('counter', createActions({
+const counterActions = mountActions(REDUX_PATH, createActions({
   increment: (value = 1) => ({ value }),
-  decrement: (value = 1) => ({ value })
 }))
 
 const counterReducer = createReducer(INITIAL_STATE, {
   [counterActions.increment]: (state, payload) => Math.min(state + payload.amount, COUNTER_MAX),
-  [counterActions.decrement]: (state, payload) => Math.max(state + payload.amount, COUNTER_MIN),
   [counterActions.reset]: () => INITIAL_STATE
 })
 
-const counterSelector = mountSelectors('counter', {
+const counterSelector = mountSelectors(REDUX_PATH, {
   value: counterState => counterState,
   isComplete: counterState => counterState === COUNTER_MAX
 })
@@ -237,29 +220,26 @@ However, what if we wanted to reuse this logic in multiple places in the redux s
 import { createActions, mountActions } from 'redux-modular'
 
 const INITIAL_STATE = 0
-const COUNTER_MIN = 0
 
 export default function createCounterLogic (path, counterMax) {
-  const counterActions = mountActions(path, createActions({
+  const actions = mountActions(path, createActions({
     increment: (value = 1) => ({ value }),
-    decrement: (value = 1) => ({ value })
   }))
 
-  const counterReducer = createReducer(INITIAL_STATE, {
+  const reducer = createReducer(INITIAL_STATE, {
     [counterActions.increment]: (state, payload) => Math.min(state + payload.amount, counterMax),
-    [counterActions.decrement]: (state, payload) => Math.max(state + payload.amount, COUNTER_MIN),
     [counterActions.reset]: () => INITIAL_STATE
   })
 
-  const counterSelector = mountSelectors(path, {
+  const selectors = mountSelectors(path, {
     value: counterState => counterState,
     isComplete: counterState => counterState === counterMax
   })
 
   return {
-    counterActions,
-    counterReducer,
-    counterSelectors
+    actions,
+    reducer,
+    selectors
   }
 }
 ```
@@ -308,7 +288,7 @@ const {
   counterReducer
 } = createCounterLogic(null, COUNTER_MAX)
 
-it('can increment and decrement', () => {
+test('counter logic', () => {
   let state = counterReducer(undefined, { type: '@@INIT' })
   expect(counterSelectors.value(state)).toEqual(0)
   expect(counterSelectors.isComplete(state)).toEqual(false)
@@ -323,10 +303,6 @@ it('can increment and decrement', () => {
 
   state = counterReducer(state, counterActions.increment())
   expect(counterSelectors.value(state)).toEqual(5) // shouldn't be able to increment past 5
-
-  state = counterReducer(state, counterActions.increment())
-  expect(counterSelectors.value(state)).toEqual(4)
-  expect(counterSelectors.isComplete(state)).toEqual(false)
 })
 ```
 
