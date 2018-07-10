@@ -2,7 +2,7 @@
 
 import * as reduxModular from '../src/index'
 
-it('exports modularize and createReducer', () => {
+test('exported functions', () => {
   expect(reduxModular).toHaveProperty('mount')
   expect(reduxModular).toHaveProperty('createAction')
   expect(reduxModular).toHaveProperty('createActions')
