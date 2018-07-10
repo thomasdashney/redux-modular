@@ -121,7 +121,7 @@ import { createAction, mountAction } from 'redux-modular'
 const namespace = 'counter'
 
 const counterActions = {
-  increment: mountAction(namespace, createAction('increment', (value = 1) => ({ value })))
+  increment: mountAction(namespace, createAction('increment', (amount = 1) => ({ amount })))
   reset: mountAction(createAction('reset')
 })
 
@@ -134,7 +134,7 @@ Finally, we can use the `createActions` and `mountActions` helpers to reduce all
 import { createActions, mountActions } from 'redux-modular'
 
 const counterActions = mountActions('counter', createActions({
-  increment: (value = 1) => ({ value }),
+  increment: (amount = 1) => ({ amount }),
   reset
 }))
 ```
@@ -199,7 +199,7 @@ const INITIAL_STATE = 0
 const COUNTER_MAX = 10
 
 const counterActions = mountActions(REDUX_PATH, createActions({
-  increment: (value = 1) => ({ value }),
+  increment: (amount = 1) => ({ amount }),
 }))
 
 const counterReducer = createReducer(INITIAL_STATE, {
@@ -223,7 +223,7 @@ const INITIAL_STATE = 0
 
 export default function createCounterLogic (path, counterMax) {
   const actions = mountActions(path, createActions({
-    increment: (value = 1) => ({ value }),
+    increment: (amount = 1) => ({ amount }),
   }))
 
   const reducer = createReducer(INITIAL_STATE, {
