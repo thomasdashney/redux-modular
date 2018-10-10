@@ -1,8 +1,9 @@
 {
   "name": "redux-modular",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Modular Redux helpers",
   "main": "index.js",
+  "types": "index.d.ts",
   "scripts": {
     "build": "rollup -c",
     "publish-npm": "npm run build && npm publish",
