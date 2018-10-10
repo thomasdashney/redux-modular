@@ -24,7 +24,9 @@
   },
   "homepage": "https://github.com/thomasdashney/redux-modular#readme",
   "dependencies": {
-    "lodash.get": "^4.4.2"
+    "babel-plugin-dev-expression": "^0.2.1",
+    "lodash.get": "^4.4.2",
+    "warning": "^4.0.1"
   },
   "devDependencies": {
     "babel-jest": "^21.2.0",
