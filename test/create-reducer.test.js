@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
-import createReducer from '../src/create-reducer'
-import createAction from '../src/create-action'
+import createReducer from '../src/reducer-helpers/create-reducer'
+import createAction from '../src/action-helpers/create-action'
 
 it('sets initial state', () => {
   const initialState = { initial: 'state' }
@@ -43,4 +43,8 @@ it('returns the previous state given an unknown action', () => {
   })
 
   expect(reduce(1, { type: 'UNEXPECTED' })).toEqual(1)
+})
+
+it('throws an error if the second argument is not an object', () => {
+  expect(() => createReducer(0)).toThrow()
 })
